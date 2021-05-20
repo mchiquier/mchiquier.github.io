@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<title>Mia Chiquier - Computer Vision at Columbia University</title>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+<style>
+        @import url('https://rsms.me/inter/inter.css');
+        /*@import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@1,700&display=swap');*/
+
+        html,
+        * {
+            font-family: 'Inter', sans-serif !important;
+            /*font-family: 'Jost', sans-serif !important;*/
+        }
+
+        @supports (font-variation-settings: normal) {
+
+            html,
+            * {
+                font-family: 'Inter var', sans-serif !important;
+            }
+        }
+
+        nav {
+            letter-spacing: -0.017em;
+        }
+
+        #photos {
+            /* Prevent vertical gaps */
+            /*line-height: 0;*/
+
+            -webkit-column-count: 6;
+            -webkit-column-gap: 10px;
+            -moz-column-count: 6;
+            -moz-column-gap: 10px;
+            column-count: 6;
+            column-gap: 10px;
+            padding: 10px 10px 20px 10px;
+            font-size: 1.2em;
+        }
+
+        #photos video {
+            /* Just in case there are inline attributes */
+            width: 100% !important;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            height: auto !important;
+        }
+
+        @media (max-width: 1200px) {
+            #photos {
+                -moz-column-count: 4;
+                -webkit-column-count: 4;
+                column-count: 4;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            #photos {
+                -moz-column-count: 3;
+                -webkit-column-count: 3;
+                column-count: 3;
+            }
+        }
+
+        @media (max-width: 600px) {
+            #photos {
+                -moz-column-count: 1;
+                -webkit-column-count: 1;
+                column-count: 1;
+            }
+        }
+
+        @media (min-aspect-ratio: 19/10) and (max-height: 800px) {
+            .caption {
+                font-size: 1em !important;
+                padding: 10px !important;
+                text-align: center;
+                letter-spacing: -0.011em;
+            }
+        }
+
+        figure {
+            margin: 0;
+            position: relative;
+            margin-bottom: 10px;
+            cursor: pointer;
+
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+        }
+
+        figcaption {
+            background: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            bottom: 0;
+            min-height: 40px;
+            /* vertical-align: middle; */
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+            color: white;
+            /*font-weight: bold;*/
+            border-bottom-right-radius: 5px;
+            border-bottom-left-radius: 5px;
+            visibility: hidden;
+            letter-spacing: -0.0155em;
+            /*text-transform: uppercase;*/
+            opacity: 0;
+            transition: visibility 0s, opacity 0.2s linear;
+        }
+
+        figure:hover figcaption {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .lightbox {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            z-index: 1031;
+        }
+
+        .lightbox .content {
+            max-width: 90vw;
+            max-height: 90vh;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            z-index: 3;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lightbox video {
+            max-width: 100%;
+            max-height: calc(90vh);
+            /*border-top-right-radius: 5px;
+            border-top-left-radius: 5px;*/
+        }
+
+        .lightbox.hidden {
+            display: none;
+            z-index: -1;
+        }
+
+        .caption {
+            padding: 15px;
+            font-size: 1.5em;
+            font-weight: bold;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            letter-spacing: -0.019em;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-bottom-right-radius: 5px;
+            border-bottom-left-radius: 5px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #navbarNav a {
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+<body class="h-100 d-flex flex-column">
+<header class="bg-light fixed-top">
+<nav class="navbar navbar-expand-sm navbar-light">
+<b style="font-weight:400;"><a class="navbar-brand" href="..">Mia Chiquier</a></b>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+<span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarNav">
+<ul class="navbar-nav" style="margin-left: auto">
+<li class="nav-item">
+<a class="nav-link" href="..">Go back</a>
+</li>
+</ul>
+</div>
+</nav>
+</header>
+<main class="" style="padding-top:56px">
+<div id="photos">
+<div>
+<figure><video playsinline muted autoplay loop src="watervids/vid_0001.MOV"></video>
+<figcaption>Bretagne, France</figcaption>
+</figure></div>
+<div>
+<figure><video playsinline muted autoplay loop src="watervids/vid_0002.MOV"></video>
+<figcaption>Bretagne, France</figcaption>
+</figure></div>
+<div>
+<figure><video playsinline="" muted="" autoplay="" loop="" src="watervids/vid_0001.MOV"></video>
+<figcaption>Bretagne, France</figcaption>
+</figure></div>
+
+
+</div>
+</main>
+<div class="lightbox hidden">
+<div class="content">
+<div class="caption"></div>
+</div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('figure').on('click', function (e) {
+            $('.lightbox .caption').text($(this).find('figcaption').text()); // .toUpperCase()
+            $('.lightbox video').attr('src', $(this).find('video').attr('src'));
+            $('.lightbox').removeClass('hidden');
+            e.stopPropagation();
+        });
+        $(document).click(function (event) {
+            $target = $(event.target);
+            if (!$target.closest('.lightbox .content').length && !$('.lightbox').hasClass("hidden")) {
+                $('.lightbox').addClass('hidden');
+            }
+        });
+    })
+</script>
+</body>
+</html>
